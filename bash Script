@@ -1,0 +1,9 @@
+i=1
+for mov in *.mov; do
+ 	   name=`echo $mov | cut -f1 -d'.'`
+    jpg_ext='.jpg'
+   duration=$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$mov")
+    echo "$i": extracting the Best frame of Video "$mov" into "$name$jpg_ext"
+    ffmpeg -ss "$(echo "$duration"/2 | bc)" -loglevel panic -i $mov  -vframes 1 -f image2 "$name$jpg_ext"
+    i=$((i+1))
+ done
